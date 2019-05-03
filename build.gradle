@@ -27,16 +27,10 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_6
 }
 
-def getExecutableName = { String execName ->
-    def os = System.getProperty("os.name").toLowerCase()
-    switch (os) {
-        case { os.contains("windows") }: return "${execName}.exe"
-        default: return execName
-    }
-}
 def javaExecutablesPath = new File(java6Home, 'bin')
+def os = org.gradle.internal.os.OperatingSystem.current()
 def javaExecutables = [:].withDefault { execName ->
-    def executable = new File(javaExecutablesPath, getExecutableName(execName))
+    def executable = new File(javaExecutablesPath, os.getExecutableName(execName))
     assert executable.exists(): "There is no ${execName} executable in ${javaExecutablesPath}"
     executable
 }
